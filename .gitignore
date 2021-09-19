@@ -1,0 +1,6 @@
+video/
+audio/
+plot/
+transcript/
+*.mp3
+notebook/resemblyzer/
