@@ -1,3 +1,4 @@
+import json
 import io
 from itertools import groupby
 from itertools import cycle
@@ -33,7 +34,7 @@ import soundfile as sf
 
 INPUT_DIR = "/analyze/audio/input/"
 OUTPUT_DIR = "/analyze/audio/output/"
-PLOT = "/analyze/plot/"
+RESULT = '/analyze/result/'
 INTERVAL = 3
 TIMES = 1000
 
@@ -269,13 +270,7 @@ def create_pipeline(list_functions):
 for root, dirs, files in os.walk(INPUT_DIR):
     for audio_file in files:
 
-        audio_dir = f"{audio_file.split('.')[0]}/"
-        check_or_make_dir(f"{OUTPUT_DIR}{audio_dir}")
-        check_or_make_dir(f"{PLOT}{audio_dir}")
-
-        input_audio = f"{INPUT_DIR}{audio_file}"
-
-        total_sound_length = get_audio_length(input_audio)
+        total_sound_length = get_audio_length(audio_file)
         sound_length_list = [ length for length in range(0, total_sound_length, 3600)]
         sound_length_set_list = {
             i:(
@@ -283,9 +278,10 @@ for root, dirs, files in os.walk(INPUT_DIR):
                 sound_length_list[i+1] if i < len(sound_length_list)-1 else total_sound_length 
             )
             for i, length in enumerate(sound_length_list) }
-        print(sound_length_set_list)
 
-        sound = get_processed_sound(input_audio)
+        timestamp_list = []
+        sound = get_processed_sound(audio_file)
+
         for sound_index, partial_sound_len in sound_length_set_list.items():
 
             begin = partial_sound_len[0]
@@ -297,7 +293,7 @@ for root, dirs, files in os.walk(INPUT_DIR):
             utterance_embeds = get_utterance_embeds(wavs)
 
             X = plot_projections(utterance_embeds, speakers, title="Embedding projections")
-            plt.savefig(f"{PLOT}{audio_dir}{sound_index}-plot_1.png")
+            plt.savefig(f"{RESULT}{audio_dir}{sound_index}-plot_1.png")
 
             bandwidth = estimate_bandwidth(X, quantile=0.05, n_samples=len(speakers))
 
@@ -309,8 +305,6 @@ for root, dirs, files in os.walk(INPUT_DIR):
             labels_unique = np.unique(labels)
             n_clusters_ = len(labels_unique)
 
-            print("number of estimated clusters : %d" % n_clusters_)
-                    
             index_list = get_min_index(cluster_centers, X)
 
             plt.figure(1)
@@ -330,11 +324,10 @@ for root, dirs, files in os.walk(INPUT_DIR):
                 plt.plot(cluster_center[0], cluster_center[1], 'o', markerfacecolor=col,
                         markeredgecolor='k', markersize=14)
 
-            print(file_list_set)
             index_list_set = sorted(index_list_set, key=lambda item: item[1])
 
             plt.title('Estimated number of clusters: %d' % n_clusters_)
-            plt.savefig(f"{PLOT}{audio_dir}{sound_index}-plot_2.png")
+            plt.savefig(f"{RESULT}{audio_dir}{sound_index}-plot_2.png")
 
             pipeline = create_pipeline([
                 separate_continuous_sound,
@@ -344,8 +337,7 @@ for root, dirs, files in os.walk(INPUT_DIR):
             ])
 
             sound_index_list = pipeline(file_list_set)
+            timestamp_list.append(sound_index_list)
 
-            for index in sound_index_list:
-                print(index)
-            speaker_wav_path_dict = get_speaker_wav_path_dict(sound_index, sound_index_list, sound_list)
-            merge_and_save_sound(audio_dir, speaker_wav_path_dict)
+        with open(f"{RESULT}{timestamp_json}", "w") as r:
+                r.write(json.dumps(timestamp_list))

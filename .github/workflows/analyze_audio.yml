@@ -1,0 +1,49 @@
+name: Analyze Audio
+
+on:
+  workflow_dispatch:
+    inputs:
+
+jobs:
+  diagrams:
+    name: Analyze Audio
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      
+      - name: Set up Python Environment
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+          architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+
+      - name: Start Script
+        run: |
+          cd analyze_video
+          mkdir -p audio/input
+          mkdir -p audio/output
+          mkdir -p video/preclip
+          mkdir -p result
+          
+          wget http://mediahttp.iqm2.com/CambridgeMA/2383_480.mp4 -P video/
+          #wget http://archive-media.granicus.com:443/OnDemand/cambridgema/cambridgema_be270162-7395-48e0-949b-a21570aca75b.mp4 -P video/
+          #echo "download audio data"
+          #wget -q https://ondemand.npr.org/anon.npr-mp3/npr/fa/2021/07/20210723_fa_01.mp3 -P audio/input/
+          #ls audio/input/
+
+          docker run --name extract_audio -v `pwd`:/analyze hirotochigi/moviepy python analyze/src/extract_audio.py
+          docker rm -f extract_audio
+          docker run --name separate_audio -v `pwd`:/analyze hirotochigi/separate_audio python analyze/src/separate_audio.py
+          docker rm -f separate_audio
+          # bash docker/start_separate_container.sh
+          # python separate_audio.py
+          
+      - name: Upload Result
+        uses: actions/upload-artifact@v2
+        with:
+          name: result
+          path: analyze_video/result/*

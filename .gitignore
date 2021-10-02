@@ -2,5 +2,7 @@ video/
 audio/
 plot/
 transcript/
+__pycache__/
+timestamp/
 *.mp3
 notebook/resemblyzer/
