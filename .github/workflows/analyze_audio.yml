@@ -23,7 +23,8 @@ jobs:
 
       - name: Start Script
         run: |
-          cd audio_separater
+          #cd audio_separater
+          ls
           mkdir -p audio/input
           mkdir -p audio/output
           mkdir -p video/preclip
