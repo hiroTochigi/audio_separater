@@ -294,7 +294,7 @@ for root, dirs, files in os.walk(INPUT_DIR):
             utterance_embeds = get_utterance_embeds(wavs)
 
             X = plot_projections(utterance_embeds, speakers, title="Embedding projections")
-            plt.savefig(f"{RESULT}{audio_dir}{sound_index}-plot_1.png")
+            plt.savefig(f"{RESULT}{sound_index}-plot_1.png")
 
             bandwidth = estimate_bandwidth(X, quantile=0.05, n_samples=len(speakers))
 
@@ -328,7 +328,7 @@ for root, dirs, files in os.walk(INPUT_DIR):
             index_list_set = sorted(index_list_set, key=lambda item: item[1])
 
             plt.title('Estimated number of clusters: %d' % n_clusters_)
-            plt.savefig(f"{RESULT}{audio_dir}{sound_index}-plot_2.png")
+            plt.savefig(f"{RESULT}{sound_index}-plot_2.png")
 
             pipeline = create_pipeline([
                 separate_continuous_sound,
