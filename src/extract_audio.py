@@ -11,10 +11,10 @@ def main():
     for root, dirs, files in os.walk(f'{preclip_video_dir}'):
         if dirs:
             continue
-        video = [ os.path.join(root, f) for f in files ][0]
+        video = [ f for f in files ][0]
 
     subprocess.run(
-            ['ffmpeg', '-i', f'{video}','-ss', f'{s_time}', '-c:v',
+            ['ffmpeg', '-i', f'{os.path.join(preclip_video_dir, video)}','-ss', f'{s_time}', '-c:v',
             'libx264', '-crf', '30', f'{video_dir}clip_{video}']
         )
 
