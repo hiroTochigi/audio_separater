@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-preclip_video_dir = '/analyze/video/preclip/'
+preclip_video_dir = '/analyze/video/'
 video_dir = '/analyze/result/'
 audio_dir = '/analyze/audio/input/'
 s_time = '01:47'

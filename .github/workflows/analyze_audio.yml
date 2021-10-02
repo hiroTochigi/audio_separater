@@ -27,7 +27,7 @@ jobs:
           ls
           mkdir -p audio/input
           mkdir -p audio/output
-          mkdir -p video/preclip
+          mkdir -p video
           mkdir -p result
           
           wget http://mediahttp.iqm2.com/CambridgeMA/2383_480.mp4 -P video/
