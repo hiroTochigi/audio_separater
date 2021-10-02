@@ -270,6 +270,7 @@ def create_pipeline(list_functions):
 for root, dirs, files in os.walk(INPUT_DIR):
     for audio_file in files:
 
+        audio_file = os.path.join(root, audio_file)
         total_sound_length = get_audio_length(audio_file)
         sound_length_list = [ length for length in range(0, total_sound_length, 3600)]
         sound_length_set_list = {
