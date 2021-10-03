@@ -283,13 +283,17 @@ for root, dirs, files in os.walk(INPUT_DIR):
 
         timestamp_list = []
         sound = get_processed_sound(audio_file)
+        sound_list_list = [ get_sound_list(sound, partial_sound_len[0], partial_sound_len[1]) for index, partial_sound_len in sound_length_set_list.items()]
+        sound = None
 
         for sound_index, partial_sound_len in sound_length_set_list.items():
 
             begin = partial_sound_len[0]
             end = partial_sound_len[1]
 
-            sound_list = get_sound_list(sound, begin, end)
+            #sound_list = get_sound_list(sound, begin, end)
+
+            sound_index = sound_list_list[sound_index]
             wavs = get_sound_feature_matrix(sound_list)
             speakers = ['audio' for i in range(begin, end, INTERVAL)]
             utterance_embeds = get_utterance_embeds(wavs)
