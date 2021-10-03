@@ -31,7 +31,7 @@ jobs:
           mkdir -p result
           
           #wget http://mediahttp.iqm2.com/CambridgeMA/2383_480.mp4 -P video/
-          wget http://archive-media.granicus.com:443/OnDemand/cambridgema/cambridgema_8530e703-3606-4e3b-ad22-90ea59e9915d.mp4 -P video/
+          wget http://archive-media.granicus.com:443/OnDemand/cambridgema/cambridgema_54667022-7ac2-446d-bb12-6b18c40cacbb.mp4 -P video/
           #echo "download audio data"
           #wget -q https://ondemand.npr.org/anon.npr-mp3/npr/fa/2021/07/20210723_fa_01.mp3 -P audio/input/
           #ls audio/input/
