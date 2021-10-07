@@ -1,6 +1,7 @@
 video/
 audio/
 plot/
+result/
 transcript/
 __pycache__/
 timestamp/

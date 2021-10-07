@@ -4,7 +4,7 @@ import subprocess
 preclip_video_dir = '/analyze/video/'
 video_dir = '/analyze/result/'
 audio_dir = '/analyze/audio/input/'
-s_time = '04:05'
+s_time = '04:51'
 video = ''
 
 def main():
